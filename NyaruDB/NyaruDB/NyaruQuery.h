@@ -29,23 +29,23 @@
 #pragma mark - Extensions
 @interface NyaruQuery (NyaruQueryIn)
 #pragma mark - Intersection
-- (NyaruQuery *)and:(NSString *)indexName equal:(id)value;
-- (NyaruQuery *)and:(NSString *)indexName notEqual:(id)value;
-- (NyaruQuery *)and:(NSString *)indexName less:(id)value;
-- (NyaruQuery *)and:(NSString *)indexName lessEqual:(id)value;
-- (NyaruQuery *)and:(NSString *)indexName greater:(id)value;
-- (NyaruQuery *)and:(NSString *)indexName greaterEqual:(id)value;
-- (NyaruQuery *)and:(NSString *)indexName like:(NSString *)value;
+- (NyaruQuery *)qand:(NSString *)indexName equal:(id)value;
+- (NyaruQuery *)qand:(NSString *)indexName notEqual:(id)value;
+- (NyaruQuery *)qand:(NSString *)indexName less:(id)value;
+- (NyaruQuery *)qand:(NSString *)indexName lessEqual:(id)value;
+- (NyaruQuery *)qand:(NSString *)indexName greater:(id)value;
+- (NyaruQuery *)qand:(NSString *)indexName greaterEqual:(id)value;
+- (NyaruQuery *)qand:(NSString *)indexName like:(NSString *)value;
 
 #pragma mark - Union
-- (NyaruQuery *)orAll;
-- (NyaruQuery *)or:(NSString *)indexName equal:(id)value;
-- (NyaruQuery *)or:(NSString *)indexName notEqual:(id)value;
-- (NyaruQuery *)or:(NSString *)indexName less:(id)value;
-- (NyaruQuery *)or:(NSString *)indexName lessEqual:(id)value;
-- (NyaruQuery *)or:(NSString *)indexName greater:(id)value;
-- (NyaruQuery *)or:(NSString *)indexName greaterEqual:(id)value;
-- (NyaruQuery *)or:(NSString *)indexName like:(NSString *)value;
+- (NyaruQuery *)qorAll;
+- (NyaruQuery *)qor:(NSString *)indexName equal:(id)value;
+- (NyaruQuery *)qor:(NSString *)indexName notEqual:(id)value;
+- (NyaruQuery *)qor:(NSString *)indexName less:(id)value;
+- (NyaruQuery *)qor:(NSString *)indexName lessEqual:(id)value;
+- (NyaruQuery *)qor:(NSString *)indexName greater:(id)value;
+- (NyaruQuery *)qor:(NSString *)indexName greaterEqual:(id)value;
+- (NyaruQuery *)qor:(NSString *)indexName like:(NSString *)value;
 
 
 #pragma mark - Order By
