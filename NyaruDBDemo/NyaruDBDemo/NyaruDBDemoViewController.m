@@ -101,7 +101,7 @@
     
     timer = [NSDate date];
     for (NSInteger index = 0; index < 10; index++) {
-        if ([collection where:@"group" equal:[NSNumber numberWithInt:arc4random() % 10]].count) {}
+        if ([collection whereIs:@"group" equal:[NSNumber numberWithInt:arc4random() % 10]].count) {}
     }
     NSLog(@"------------------------------------------------");
     NSLog(@"search documents in 1k data for 10 times cost : %f ms", [timer timeIntervalSinceNow] * -1000.0);

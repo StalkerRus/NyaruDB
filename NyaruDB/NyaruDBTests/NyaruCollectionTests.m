@@ -170,70 +170,70 @@
     XCTAssertEqual([query.queries[0] operation], NyaruQueryAll, @"");
 }
 
-- (void)testQueryWhereEqual
+- (void)testQuerywhereIsEqual
 {
     _collection = [_db collection:@"collection"];
-    NyaruQuery *query = [_collection where:@"name" equal:@"value"];
+    NyaruQuery *query = [_collection whereIs:@"name" equal:@"value"];
     XCTAssertEqual(query.collection, _collection, @"");
     XCTAssertEqual([query.queries[0] operation], NyaruQueryEqual, @"");
     XCTAssertEqualObjects([query.queries[0] schemaName], @"name", @"");
     XCTAssertEqualObjects([query.queries[0] value], @"value", @"");
 }
 
-- (void)testQueryWhereNotEqual
+- (void)testQuerywhereIsNotEqual
 {
     _collection = [_db collection:@"collection"];
-    NyaruQuery *query = [_collection where:@"name" notEqual:@"value"];
+    NyaruQuery *query = [_collection whereIs:@"name" notEqual:@"value"];
     XCTAssertEqual(query.collection, _collection, @"");
     XCTAssertEqual([query.queries[0] operation], NyaruQueryUnequal, @"");
     XCTAssertEqualObjects([query.queries[0] schemaName], @"name", @"");
     XCTAssertEqualObjects([query.queries[0] value], @"value", @"");
 }
 
-- (void)testQueryWhereLess
+- (void)testQuerywhereIsLess
 {
     _collection = [_db collection:@"collection"];
-    NyaruQuery *query = [_collection where:@"name" less:@10];
+    NyaruQuery *query = [_collection whereIs:@"name" less:@10];
     XCTAssertEqual(query.collection, _collection, @"");
     XCTAssertEqual([query.queries[0] operation], NyaruQueryLess, @"");
     XCTAssertEqualObjects([query.queries[0] schemaName], @"name", @"");
     XCTAssertEqualObjects([query.queries[0] value], @10, @"");
 }
 
-- (void)testQueryWhereLessEqual
+- (void)testQuerywhereIsLessEqual
 {
     _collection = [_db collection:@"collection"];
-    NyaruQuery *query = [_collection where:@"name" lessEqual:@10];
+    NyaruQuery *query = [_collection whereIs:@"name" lessEqual:@10];
     XCTAssertEqual(query.collection, _collection, @"");
     XCTAssertEqual([query.queries[0] operation], NyaruQueryLessEqual, @"");
     XCTAssertEqualObjects([query.queries[0] schemaName], @"name", @"");
     XCTAssertEqualObjects([query.queries[0] value], @10, @"");
 }
 
-- (void)testQueryWhereGreater
+- (void)testQuerywhereIsGreater
 {
     _collection = [_db collection:@"collection"];
-    NyaruQuery *query = [_collection where:@"name" greater:@10];
+    NyaruQuery *query = [_collection whereIs:@"name" greater:@10];
     XCTAssertEqual(query.collection, _collection, @"");
     XCTAssertEqual([query.queries[0] operation], NyaruQueryGreater, @"");
     XCTAssertEqualObjects([query.queries[0] schemaName], @"name", @"");
     XCTAssertEqualObjects([query.queries[0] value], @10, @"");
 }
 
-- (void)testQueryWhereGreaterEqual
+- (void)testQuerywhereIsGreaterEqual
 {
     _collection = [_db collection:@"collection"];
-    NyaruQuery *query = [_collection where:@"name" greaterEqual:@10];
+    NyaruQuery *query = [_collection whereIs:@"name" greaterEqual:@10];
     XCTAssertEqual(query.collection, _collection, @"");
     XCTAssertEqual([query.queries[0] operation], NyaruQueryGreaterEqual, @"");
     XCTAssertEqualObjects([query.queries[0] schemaName], @"name", @"");
     XCTAssertEqualObjects([query.queries[0] value], @10, @"");
 }
 
-- (void)testQueryWhereLike
+- (void)testQuerywhereIsLike
 {
     _collection = [_db collection:@"collection"];
-    NyaruQuery *query = [_collection where:@"name" like:@"value"];
+    NyaruQuery *query = [_collection whereIs:@"name" like:@"value"];
     XCTAssertEqual(query.collection, _collection, @"");
     XCTAssertEqual([query.queries[0] operation], NyaruQueryLike, @"");
     XCTAssertEqualObjects([query.queries[0] schemaName], @"name", @"");
@@ -250,7 +250,7 @@
     NSDictionary *doc = [_collection put:@{@"name": @"value"}];
     XCTAssertEqual(_collection.count, 1U, @"");
     
-    [[_collection where:@"key" equal:doc[@"key"]] remove];
+    [[_collection whereIs:@"key" equal:doc[@"key"]] remove];
     XCTAssertEqual(_collection.count, 0U, @"");
     
     [_collection put:@{@"name": @1}];
@@ -262,12 +262,12 @@
 {
     _collection = [_db collection:@"collection"];
     [_collection createIndex:@"name"];
-    NSUInteger count = [[_collection where:@"name" equal:@1] count];
+    NSUInteger count = [[_collection whereIs:@"name" equal:@1] count];
     XCTAssertEqual(count, 0U, @"");
     
     [_collection put:@{@"name": @1}];
     [_collection put:@{@"name": @1}];
-    count = [[_collection where:@"name" equal:@1] count];
+    count = [[_collection whereIs:@"name" equal:@1] count];
     XCTAssertEqual(count, 2U, @"");
 }
 
@@ -344,7 +344,7 @@
     
     [_collection put:@{@"name": @1}];
     [_collection put:@{@"name": @1}];
-    [[_collection where:@"name" equal:@1] countAsync:^(NSUInteger count) {
+    [[_collection whereIs:@"name" equal:@1] countAsync:^(NSUInteger count) {
         XCTAssertEqual(count, 2U, @"");
         executed = YES;
         dispatch_semaphore_signal(sync);
@@ -365,7 +365,7 @@
     _collection = [_db collection:@"collection"];
     [_collection createIndex:@"name"];
     NSDictionary *doc = [_collection put:@{@"name": @"value"}];
-    NyaruQuery *query = [_collection where:@"name" equal:@"value"];
+    NyaruQuery *query = [_collection whereIs:@"name" equal:@"value"];
     NSArray *data = [_collection fetchByQuery:query.queries skip:0 limit:0];
     XCTAssertEqualObjects(data[0], doc, @"");
 }
@@ -378,7 +378,7 @@
     _collection = [_db collection:@"collection"];
     [_collection createIndex:@"name"];
     NSDictionary *doc = [_collection put:@{@"name": @"value"}];
-    NyaruQuery *query = [_collection where:@"name" equal:@"value"];
+    NyaruQuery *query = [_collection whereIs:@"name" equal:@"value"];
     [_collection fetchByQuery:query.queries skip:0 limit:0 async:^(NSArray *data) {
         XCTAssertEqualObjects(data[0], doc, @"");
         executed = YES;
