@@ -49,17 +49,17 @@
     // insert with key
     NSString *key = [collection put:@{@"data": @"value", @"key": @"aa" }][@"key"];
     XCTAssertEqual(collection.count, 1U, @"");
-    XCTAssertEqualObjects([[collection where:@"key" equal:key] fetchFirst][@"data"], @"value", @"");
+    XCTAssertEqualObjects([[collection whereIs:@"key" equal:key] fetchFirst][@"data"], @"value", @"");
     
     // insert without key
     key = [collection put:@{@"name": @"Kelp"}][@"key"];
-    XCTAssertEqualObjects([[collection where:@"key" equal:key] fetchFirst][@"name"], @"Kelp", @"");
+    XCTAssertEqualObjects([[collection whereIs:@"key" equal:key] fetchFirst][@"name"], @"Kelp", @"");
     // then remove it
-    [[collection where:@"key" equal:key] remove];
+    [[collection whereIs:@"key" equal:key] remove];
     XCTAssertEqual(collection.count, 1U, @"");
     
     // remove key == @"aa"
-    [[collection where:@"key" equal:@"aa"] remove];
+    [[collection whereIs:@"key" equal:@"aa"] remove];
     XCTAssertEqual(collection.count, 0U, @"");
 }
 
@@ -86,7 +86,7 @@
     [collection put:@{@"name": @"Kelp"}];
     [collection put:@{@"name": @"Kelp X", @"updateTime": time}];
     [collection put:@{@"name": @"Kelp"}];
-    XCTAssertEqualObjects([[collection where:@"updateTime" equal:time] fetchFirst][@"name"], @"Kelp X", @"");
+    XCTAssertEqualObjects([[collection whereIs:@"updateTime" equal:time] fetchFirst][@"name"], @"Kelp X", @"");
 }
 
 - (void)testInsertAndQueryString
@@ -99,40 +99,40 @@
     }
     [co put:@{@"string": @"B5", @"data": @"data00"}];
     // count
-    XCTAssertEqual([co where:@"string" equal:@"B0"].count, 1U, @"");
-    XCTAssertEqual([co where:@"string" equal:@"B5"].count, 2U, @"");
-    XCTAssertEqual([co where:@"string" equal:@"B9"].count, 1U, @"");
-    XCTAssertEqual([co where:@"string" equal:@"B10"].count, 0U, @"");
-    XCTAssertEqual([co where:@"string" notEqual:@"B0"].count, 10U, @"");
-    XCTAssertEqual([co where:@"string" notEqual:@"B5"].count, 9U, @"");
-    XCTAssertEqual([co where:@"string" notEqual:@"B9"].count, 10U, @"");
-    XCTAssertEqual([co where:@"string" notEqual:@"B10"].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"string" equal:@"B0"].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"string" equal:@"B5"].count, 2U, @"");
+    XCTAssertEqual([co whereIs:@"string" equal:@"B9"].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"string" equal:@"B10"].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"string" notEqual:@"B0"].count, 10U, @"");
+    XCTAssertEqual([co whereIs:@"string" notEqual:@"B5"].count, 9U, @"");
+    XCTAssertEqual([co whereIs:@"string" notEqual:@"B9"].count, 10U, @"");
+    XCTAssertEqual([co whereIs:@"string" notEqual:@"B10"].count, 11U, @"");
     
-    XCTAssertEqual([co where:@"string" greater:@"B9"].count, 0U, @"");
-    XCTAssertEqual([co where:@"string" greater:@"B8"].count, 1U, @"");
-    XCTAssertEqual([co where:@"string" greater:@"B0"].count, 10U, @"");
-    XCTAssertEqual([co where:@"string" greater:@"A0"].count, 11U, @"");
-    XCTAssertEqual([co where:@"string" greaterEqual:@"C0"].count, 0U, @"");
-    XCTAssertEqual([co where:@"string" greaterEqual:@"B9"].count, 1U, @"");
-    XCTAssertEqual([co where:@"string" greaterEqual:@"B8"].count, 2U, @"");
-    XCTAssertEqual([co where:@"string" greaterEqual:@"B0"].count, 11U, @"");
-    XCTAssertEqual([co where:@"string" greaterEqual:@"A0"].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"string" greater:@"B9"].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"string" greater:@"B8"].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"string" greater:@"B0"].count, 10U, @"");
+    XCTAssertEqual([co whereIs:@"string" greater:@"A0"].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"string" greaterEqual:@"C0"].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"string" greaterEqual:@"B9"].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"string" greaterEqual:@"B8"].count, 2U, @"");
+    XCTAssertEqual([co whereIs:@"string" greaterEqual:@"B0"].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"string" greaterEqual:@"A0"].count, 11U, @"");
     
-    XCTAssertEqual([co where:@"string" less:@"A0"].count, 0U, @"");
-    XCTAssertEqual([co where:@"string" less:@"B0"].count, 0U, @"");
-    XCTAssertEqual([co where:@"string" less:@"B1"].count, 1U, @"");
-    XCTAssertEqual([co where:@"string" less:@"B6"].count, 7U, @"");
-    XCTAssertEqual([co where:@"string" less:@"B9"].count, 10U, @"");
-    XCTAssertEqual([co where:@"string" less:@"C0"].count, 11U, @"");
-    XCTAssertEqual([co where:@"string" lessEqual:@"A0"].count, 0U, @"");
-    XCTAssertEqual([co where:@"string" lessEqual:@"B0"].count, 1U, @"");
-    XCTAssertEqual([co where:@"string" lessEqual:@"B1"].count, 2U, @"");
-    XCTAssertEqual([co where:@"string" lessEqual:@"B6"].count, 8U, @"");
-    XCTAssertEqual([co where:@"string" lessEqual:@"B9"].count, 11U, @"");
-    XCTAssertEqual([co where:@"string" lessEqual:@"C0"].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"string" less:@"A0"].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"string" less:@"B0"].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"string" less:@"B1"].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"string" less:@"B6"].count, 7U, @"");
+    XCTAssertEqual([co whereIs:@"string" less:@"B9"].count, 10U, @"");
+    XCTAssertEqual([co whereIs:@"string" less:@"C0"].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"string" lessEqual:@"A0"].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"string" lessEqual:@"B0"].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"string" lessEqual:@"B1"].count, 2U, @"");
+    XCTAssertEqual([co whereIs:@"string" lessEqual:@"B6"].count, 8U, @"");
+    XCTAssertEqual([co whereIs:@"string" lessEqual:@"B9"].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"string" lessEqual:@"C0"].count, 11U, @"");
     
-    XCTAssertEqual([co where:@"string" like:@"b"].count, 11U, @"");
-    XCTAssertEqual([co where:@"string" like:@"c"].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"string" like:@"b"].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"string" like:@"c"].count, 0U, @"");
 }
 
 - (void)testInsertAndQueryNumber
@@ -145,37 +145,37 @@
     }
     [co put:@{@"number": @5, @"data": @"data00"}];
     // count
-    XCTAssertEqual([co where:@"number" equal:@0].count, 1U, @"");
-    XCTAssertEqual([co where:@"number" equal:@5].count, 2U, @"");
-    XCTAssertEqual([co where:@"number" equal:@9].count, 1U, @"");
-    XCTAssertEqual([co where:@"number" equal:@10].count, 0U, @"");
-    XCTAssertEqual([co where:@"number" notEqual:@0].count, 10U, @"");
-    XCTAssertEqual([co where:@"number" notEqual:@5].count, 9U, @"");
-    XCTAssertEqual([co where:@"number" notEqual:@9].count, 10U, @"");
-    XCTAssertEqual([co where:@"number" notEqual:@10].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"number" equal:@0].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"number" equal:@5].count, 2U, @"");
+    XCTAssertEqual([co whereIs:@"number" equal:@9].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"number" equal:@10].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"number" notEqual:@0].count, 10U, @"");
+    XCTAssertEqual([co whereIs:@"number" notEqual:@5].count, 9U, @"");
+    XCTAssertEqual([co whereIs:@"number" notEqual:@9].count, 10U, @"");
+    XCTAssertEqual([co whereIs:@"number" notEqual:@10].count, 11U, @"");
     
-    XCTAssertEqual([co where:@"number" greater:@9].count, 0U, @"");
-    XCTAssertEqual([co where:@"number" greater:@8].count, 1U, @"");
-    XCTAssertEqual([co where:@"number" greater:@0].count, 10U, @"");
-    XCTAssertEqual([co where:@"number" greater:@-1].count, 11U, @"");
-    XCTAssertEqual([co where:@"number" greaterEqual:@10].count, 0U, @"");
-    XCTAssertEqual([co where:@"number" greaterEqual:@9].count, 1U, @"");
-    XCTAssertEqual([co where:@"number" greaterEqual:@8].count, 2U, @"");
-    XCTAssertEqual([co where:@"number" greaterEqual:@0].count, 11U, @"");
-    XCTAssertEqual([co where:@"number" greaterEqual:@-1].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"number" greater:@9].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"number" greater:@8].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"number" greater:@0].count, 10U, @"");
+    XCTAssertEqual([co whereIs:@"number" greater:@-1].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"number" greaterEqual:@10].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"number" greaterEqual:@9].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"number" greaterEqual:@8].count, 2U, @"");
+    XCTAssertEqual([co whereIs:@"number" greaterEqual:@0].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"number" greaterEqual:@-1].count, 11U, @"");
     
-    XCTAssertEqual([co where:@"number" less:@-1].count, 0U, @"");
-    XCTAssertEqual([co where:@"number" less:@0].count, 0U, @"");
-    XCTAssertEqual([co where:@"number" less:@1].count, 1U, @"");
-    XCTAssertEqual([co where:@"number" less:@6].count, 7U, @"");
-    XCTAssertEqual([co where:@"number" less:@9].count, 10U, @"");
-    XCTAssertEqual([co where:@"number" less:@10].count, 11U, @"");
-    XCTAssertEqual([co where:@"number" lessEqual:@-1].count, 0U, @"");
-    XCTAssertEqual([co where:@"number" lessEqual:@0].count, 1U, @"");
-    XCTAssertEqual([co where:@"number" lessEqual:@1].count, 2U, @"");
-    XCTAssertEqual([co where:@"number" lessEqual:@6].count, 8U, @"");
-    XCTAssertEqual([co where:@"number" lessEqual:@9].count, 11U, @"");
-    XCTAssertEqual([co where:@"number" lessEqual:@10].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"number" less:@-1].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"number" less:@0].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"number" less:@1].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"number" less:@6].count, 7U, @"");
+    XCTAssertEqual([co whereIs:@"number" less:@9].count, 10U, @"");
+    XCTAssertEqual([co whereIs:@"number" less:@10].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"number" lessEqual:@-1].count, 0U, @"");
+    XCTAssertEqual([co whereIs:@"number" lessEqual:@0].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"number" lessEqual:@1].count, 2U, @"");
+    XCTAssertEqual([co whereIs:@"number" lessEqual:@6].count, 8U, @"");
+    XCTAssertEqual([co whereIs:@"number" lessEqual:@9].count, 11U, @"");
+    XCTAssertEqual([co whereIs:@"number" lessEqual:@10].count, 11U, @"");
 }
 
 - (void)testInsertAndQueryDate
@@ -188,15 +188,15 @@
     }
     for (NSUInteger index = 1; index <= 10; index++) {
         NSDate *date = [NSDate dateWithTimeIntervalSince1970:index * 100];
-        XCTAssertEqual([[co where:@"date" equal:date] count], 1U, @"");
+        XCTAssertEqual([[co whereIs:@"date" equal:date] count], 1U, @"");
         
         date = [NSDate dateWithTimeIntervalSince1970:(index + 1) * 100];
-        XCTAssertEqual([[co where:@"date" less:date] count], index, @"");
+        XCTAssertEqual([[co whereIs:@"date" less:date] count], index, @"");
     }
     
-    XCTAssertEqual([[co where:@"date" greaterEqual:[NSDate dateWithTimeIntervalSince1970:0]] count], 10U, @"");
-    XCTAssertEqual([[co where:@"date" greaterEqual:[NSDate date]] count], 0U, @"");
-    XCTAssertEqual([[co where:@"date" less:[NSDate date]] count], 10U, @"");
+    XCTAssertEqual([[co whereIs:@"date" greaterEqual:[NSDate dateWithTimeIntervalSince1970:0]] count], 10U, @"");
+    XCTAssertEqual([[co whereIs:@"date" greaterEqual:[NSDate date]] count], 0U, @"");
+    XCTAssertEqual([[co whereIs:@"date" less:[NSDate date]] count], 10U, @"");
 }
 
 - (void)testReadWrite
@@ -276,7 +276,7 @@
     }
     
     NSNumber *previous = nil;
-    NSArray *documents = [[[[[co where:@"number" greaterEqual:@6] or:@"number" equal:@5] and:@"name" equal:@"kelp"] orderBy:@"number"] fetch];
+    NSArray *documents = [[[[[co whereIs:@"number" greaterEqual:@6] or:@"number" equal:@5] and:@"name" equal:@"kelp"] orderBy:@"number"] fetch];
     XCTAssertEqual(documents.count > 0, true, @"");
     for (NSMutableDictionary *doc in documents) {
         if (!doc[@"number"] || [doc[@"number"] isKindOfClass:NSNull.class]) { continue; }
@@ -331,7 +331,7 @@
     [co put:@{@"n": @4}];
     [co put:@{@"n": @6}];
     
-    XCTAssertEqual([co where:@"n" greater:@5].count, 1U, @"");
+    XCTAssertEqual([co whereIs:@"n" greater:@5].count, 1U, @"");
 }
 
 - (void)testSpeed
@@ -366,7 +366,7 @@
     
     timer = [NSDate date];
     for (NSInteger index = 0; index < 10; index++) {
-        if ([collection where:@"group" equal:[NSNumber numberWithInt:arc4random() % 512]].fetch) { }
+        if ([collection whereIs:@"group" equal:[NSNumber numberWithInt:arc4random() % 512]].fetch) { }
     }
     NSLog(@"------------------------------------------------");
     NSLog(@"search documents in 1k data for 10 times cost : %f ms", [timer timeIntervalSinceNow] * -1000.0);
